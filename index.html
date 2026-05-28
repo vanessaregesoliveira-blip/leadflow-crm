@@ -353,12 +353,17 @@ function startListeners(){
     leads.sort((a,b)=>(b.id||0)-(a.id||0));
     sync('✓ Sincronizado','ok');
     redraw();
+  }, err=>{
+    sync('Sem conexão','err');
+    alert('Erro ao conectar ao banco de dados: '+err.message+'\n\nVerifique as regras do Firebase.');
   });
   db.ref('consultores').on('value', snap=>{
     cons=[];
     snap.forEach(c=>cons.push({key:c.key,nome:c.val().nome}));
     refreshSels();
     if(curPage==='config')renderConfig();
+  }, err=>{
+    console.error('Erro consultores:', err);
   });
 }
 
@@ -375,14 +380,19 @@ function login(){
   const p=document.getElementById('ip').value;
   const e=document.getElementById('lerr');
   if(u==='admin'&&p==='1234'){
-    document.getElementById('login-screen').classList.remove('visible');
-    document.getElementById('app').classList.add('visible');
-    startListeners();
+    localStorage.setItem('lf_logged','1');
+    showApp();
   } else {
     e.style.display='block';e.textContent='Usuário ou senha incorretos.';
   }
 }
+function showApp(){
+  document.getElementById('login-screen').classList.remove('visible');
+  document.getElementById('app').classList.add('visible');
+  startListeners();
+}
 function logout(){
+  localStorage.removeItem('lf_logged');
   document.getElementById('app').classList.remove('visible');
   document.getElementById('login-screen').classList.add('visible');
   document.getElementById('ip').value='';
@@ -547,14 +557,17 @@ function saveLead(){
   if(!nome){alert('Informe o nome do cliente.');return;}
   sync('Salvando...','saving');
   const lead={nome,telefone:document.getElementById('ft').value,cidade:document.getElementById('fc').value,produto:document.getElementById('fp').value,origem:document.getElementById('fo').value,consultor:document.getElementById('fco').value,status:document.getElementById('fs').value,obs:document.getElementById('fob').value};
+  const done=err=>{
+    if(err){alert('Erro ao salvar lead: '+err.message);sync('Erro!','err');}
+    else closeModal();
+  };
   if(editLeadKey){
     const ex=leads.find(x=>x.key===editLeadKey);
-    db.ref('leads/'+editLeadKey).set({...lead,id:ex.id,data:ex.data});
+    db.ref('leads/'+editLeadKey).set({...lead,id:ex.id,data:ex.data}, done);
   } else {
     const newId=leads.length?Math.max(...leads.map(x=>x.id||0))+1:1;
-    db.ref('leads').push({...lead,id:newId,data:hj()});
+    db.ref('leads').push({...lead,id:newId,data:hj()}, done);
   }
-  closeModal();
 }
 function askDel(key){delLeadKey=key;document.getElementById('mdel').classList.add('open');}
 function closeDelM(){document.getElementById('mdel').classList.remove('open');delLeadKey=null;}
@@ -664,12 +677,15 @@ function saveCons(){
   sync('Salvando...','saving');
   if(editConsIdx!==null){
     const antigo=cons[editConsIdx].nome;
-    db.ref('consultores/'+cons[editConsIdx].key).set({nome});
-    // Atualiza leads com nome antigo
-    leads.filter(l=>l.consultor===antigo).forEach(l=>db.ref('leads/'+l.key+'/consultor').set(nome));
+    db.ref('consultores/'+cons[editConsIdx].key).set({nome}, err=>{
+      if(err){alert('Erro ao salvar: '+err.message);sync('Erro!','err');}
+      else{leads.filter(l=>l.consultor===antigo).forEach(l=>db.ref('leads/'+l.key+'/consultor').set(nome));}
+    });
   } else {
     if(cons.find(c=>c.nome===nome)){alert('Já existe um consultor com este nome.');return;}
-    db.ref('consultores').push({nome});
+    db.ref('consultores').push({nome}, err=>{
+      if(err){alert('Erro ao salvar: '+err.message);sync('Erro!','err');}
+    });
   }
   closeCons();
 }
@@ -692,7 +708,11 @@ document.querySelectorAll('.mov').forEach(m=>m.addEventListener('click',function
 
 // ── INICIAR ────────────────────────────────────────────
 document.getElementById('loading-screen').style.display='none';
-document.getElementById('login-screen').classList.add('visible');
+if(localStorage.getItem('lf_logged')==='1'){
+  showApp();
+} else {
+  document.getElementById('login-screen').classList.add('visible');
+}
 </script>
 </body>
 </html>
