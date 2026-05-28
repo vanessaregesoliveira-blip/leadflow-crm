@@ -4,85 +4,68 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>LeadFlow CRM</title>
-<!-- Firebase CDN (versão compatível) -->
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-:root{
-  --bg:#f8f9fb;--bg2:#ffffff;--bg3:#f1f3f6;--bg4:#e8eaed;
-  --border:#e0e2e7;--border2:#cbd0d8;
-  --text:#1a1d23;--text2:#5a6270;--text3:#9098a5;
-  --red:#e02020;--red2:#c01818;--red-bg:#fdeaea;
-  --green:#16a34a;--green-bg:#f0faf4;
-  --danger:#dc2626;--danger-bg:#fef2f2;
-  --amber:#d97706;--amber-bg:#fffbeb;
-  --purple:#7c3aed;--purple-bg:#f5f3ff;
-  --teal:#0d9488;--teal-bg:#f0fdfa;
-}
+:root{--bg:#f8f9fb;--bg2:#fff;--bg3:#f1f3f6;--bg4:#e8eaed;--border:#e0e2e7;--border2:#cbd0d8;--text:#1a1d23;--text2:#5a6270;--text3:#9098a5;--red:#e02020;--red2:#c01818;--redbg:#fdeaea;--green:#16a34a;--greenbg:#f0faf4;--danger:#dc2626;--dangerbg:#fef2f2;--amber:#d97706;--amberbg:#fffbeb;--purple:#7c3aed;--purplebg:#f5f3ff;--teal:#0d9488;--tealbg:#f0fdfa}
 body{font-family:system-ui,-apple-system,'Segoe UI',sans-serif;background:var(--bg);color:var(--text);font-size:14px;min-height:100vh}
-#loading-screen{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;gap:16px}
-.spinner{width:40px;height:40px;border:3px solid var(--border);border-top-color:var(--red);border-radius:50%;animation:spin .8s linear infinite}
-@keyframes spin{to{transform:rotate(360deg)}}
-#login-screen{display:none;align-items:center;justify-content:center;min-height:100vh;padding:20px}
-#login-screen.visible{display:flex}
-.login-box{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:40px;width:100%;max-width:380px;box-shadow:0 4px 24px rgba(0,0,0,.07)}
-.login-logo h1{font-size:26px;font-weight:800;color:var(--red);letter-spacing:-1px;text-align:center}
-.login-logo p{font-size:12px;color:var(--text3);text-align:center;margin:4px 0 24px}
-.form-group{margin-bottom:14px}
-.form-group label{display:block;font-size:11px;color:var(--text3);font-weight:700;margin-bottom:5px;text-transform:uppercase;letter-spacing:.5px}
-.form-group input,.form-group select,.form-group textarea{width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:13px;padding:10px 12px;font-family:inherit;outline:none;transition:.15s}
-.form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:var(--red)}
-.form-group textarea{resize:vertical;min-height:72px}
+#login{display:none;align-items:center;justify-content:center;min-height:100vh;padding:20px}
+#login.v{display:flex}
+.lbox{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:40px;width:100%;max-width:380px;box-shadow:0 4px 24px rgba(0,0,0,.07)}
+.llogo h1{font-size:26px;font-weight:800;color:var(--red);text-align:center}
+.llogo p{font-size:12px;color:var(--text3);text-align:center;margin:4px 0 24px}
+.fg{margin-bottom:14px}
+.fg label{display:block;font-size:11px;color:var(--text3);font-weight:700;margin-bottom:5px;text-transform:uppercase;letter-spacing:.5px}
+.fg input,.fg select,.fg textarea{width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:13px;padding:10px 12px;font-family:inherit;outline:none;transition:.15s}
+.fg input:focus,.fg select:focus,.fg textarea:focus{border-color:var(--red)}
+.fg textarea{resize:vertical;min-height:72px}
 select option{background:var(--bg2)}
-.err-msg{background:var(--danger-bg);color:var(--danger);padding:8px 12px;border-radius:8px;font-size:12px;margin-bottom:12px;display:none}
-.login-hint{text-align:center;font-size:11px;color:var(--text3);margin-top:12px}
+.lerr{background:var(--dangerbg);color:var(--danger);padding:8px 12px;border-radius:8px;font-size:12px;margin-bottom:12px;display:none;border:1px solid #fecaca}
+.lhint{text-align:center;font-size:11px;color:var(--text3);margin-top:12px}
 #app{display:none;height:100vh;overflow:hidden}
-#app.visible{display:flex}
-.sidebar{width:220px;min-width:220px;background:var(--bg2);border-right:1px solid var(--border);display:flex;flex-direction:column;height:100vh}
-.sidebar-logo{padding:20px;border-bottom:1px solid var(--border)}
-.sidebar-logo h2{font-size:18px;font-weight:800;color:var(--red)}
-.sidebar-logo small{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:1px}
+#app.v{display:flex}
+.sb{width:220px;min-width:220px;background:var(--bg2);border-right:1px solid var(--border);display:flex;flex-direction:column;height:100vh}
+.sblogo{padding:20px;border-bottom:1px solid var(--border)}
+.sblogo h2{font-size:18px;font-weight:800;color:var(--red)}
+.sblogo small{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:1px}
 .snav{padding:12px 10px;flex:1}
 .ns{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:1px;padding:8px 10px 4px;margin-top:6px}
 .ni{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:8px;cursor:pointer;color:var(--text2);font-size:13px;font-weight:500;transition:.15s;margin-bottom:2px;user-select:none}
 .ni:hover{background:var(--bg3);color:var(--text)}
-.ni.on{background:var(--red-bg);color:var(--red)}
+.ni.on{background:var(--redbg);color:var(--red)}
 .ni .ic{font-size:16px;width:20px;text-align:center}
-.sfooter{padding:12px;border-top:1px solid var(--border)}
+.sbfoot{padding:12px;border-top:1px solid var(--border)}
 .uchip{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:8px;background:var(--bg3)}
 .av{width:32px;height:32px;border-radius:50%;background:var(--red);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff;flex-shrink:0}
 .main{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0}
 .topbar{display:flex;align-items:center;gap:12px;padding:14px 24px;background:var(--bg2);border-bottom:1px solid var(--border)}
-.topbar-title{font-size:16px;font-weight:700;color:var(--text);flex-shrink:0}
+.tbtitle{font-size:16px;font-weight:700;color:var(--text);flex-shrink:0}
 .sbox{display:flex;align-items:center;gap:8px;background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:7px 12px;flex:1;max-width:320px}
 .sbox input{background:none;border:none;outline:none;color:var(--text);font-size:13px;flex:1;font-family:inherit}
 .sbox input::placeholder{color:var(--text3)}
 .tright{display:flex;gap:8px;align-items:center;margin-left:auto}
-.sbadge{display:inline-flex;align-items:center;gap:5px;font-size:11px;padding:4px 10px;border-radius:6px}
-.sbadge.ok{color:var(--green);background:var(--green-bg);border:1px solid #bbf7d0}
-.sbadge.saving{color:var(--amber);background:var(--amber-bg);border:1px solid #fde68a}
-.sbadge.err{color:var(--danger);background:var(--danger-bg);border:1px solid #fecaca}
+.sbdg{display:inline-flex;align-items:center;gap:5px;font-size:11px;padding:4px 10px;border-radius:6px}
+.sbdg.ok{color:var(--green);background:var(--greenbg);border:1px solid #bbf7d0}
+.sbdg.saving{color:var(--amber);background:var(--amberbg);border:1px solid #fde68a}
 .btn{display:inline-flex;align-items:center;gap:6px;padding:7px 14px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;border:1px solid var(--border);background:var(--bg3);color:var(--text2);transition:.15s;font-family:inherit;white-space:nowrap}
 .btn:hover{background:var(--bg4);color:var(--text)}
-.btn-p{background:var(--red);color:#fff;border-color:var(--red)}
-.btn-p:hover{background:var(--red2);color:#fff;border-color:var(--red2)}
-.btn-d{background:var(--danger-bg);color:var(--danger);border-color:#fecaca}
-.btn-s{background:var(--green-bg);color:var(--green);border-color:#bbf7d0}
-.content{flex:1;overflow-y:auto;padding:20px 24px}
+.btnp{background:var(--red);color:#fff;border-color:var(--red)}
+.btnp:hover{background:var(--red2);color:#fff}
+.btnd{background:var(--dangerbg);color:var(--danger);border-color:#fecaca}
+.btns{background:var(--greenbg);color:var(--green);border-color:#bbf7d0}
+.ct{flex:1;overflow-y:auto;padding:20px 24px}
 .page{display:none}
 .page.on{display:block}
 .cgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:18px}
 .kcard{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:18px 20px;box-shadow:0 1px 4px rgba(0,0,0,.04)}
 .kicon{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;margin-bottom:12px;font-size:20px}
-.klabel{font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:.7px;margin-bottom:6px}
+.klbl{font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:.7px;margin-bottom:6px}
 .kval{font-size:28px;font-weight:800;line-height:1}
 .ksub{font-size:11px;color:var(--text3);margin-top:5px}
 .crow{display:grid;grid-template-columns:2fr 1fr;gap:14px;margin-bottom:18px}
 .ccard{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:20px;box-shadow:0 1px 4px rgba(0,0,0,.04)}
 .ccard h3{font-size:13px;font-weight:700;margin-bottom:4px;color:var(--text)}
 .ccard p{font-size:11px;color:var(--text3);margin-bottom:14px}
-.svg-chart{width:100%;overflow:visible}
+.svgc{width:100%;overflow:visible}
 .tcard{background:var(--bg2);border:1px solid var(--border);border-radius:16px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.04)}
 .fbar{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap;align-items:center}
 .ftabs{display:flex;gap:3px}
@@ -90,8 +73,8 @@ select option{background:var(--bg2)}
 .ftab:hover{color:var(--text)}
 .ftab.on{background:var(--bg4);border-color:var(--border);color:var(--text)}
 .fsel{padding:5px 10px;border-radius:7px;font-size:12px;background:var(--bg2);border:1px solid var(--border);color:var(--text2);font-family:inherit;cursor:pointer;outline:none}
-.cbadge{margin-left:auto;font-size:12px;color:var(--text3);background:var(--bg2);border:1px solid var(--border);border-radius:7px;padding:5px 12px}
-.tscroll{overflow-x:auto}
+.cbdg{margin-left:auto;font-size:12px;color:var(--text3);background:var(--bg2);border:1px solid var(--border);border-radius:7px;padding:5px 12px}
+.tscr{overflow-x:auto}
 table{width:100%;border-collapse:collapse}
 th{font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:.6px;padding:10px 14px;text-align:left;border-bottom:1px solid var(--border);background:var(--bg3);white-space:nowrap}
 td{padding:11px 14px;border-bottom:1px solid var(--border);font-size:13px;color:var(--text2);vertical-align:middle}
@@ -103,7 +86,7 @@ tbody tr:hover td{background:var(--bg3)}
 .abts{display:flex;gap:5px}
 .ibt{width:28px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center;cursor:pointer;background:var(--bg3);border:1px solid var(--border);color:var(--text3);transition:.15s;font-size:13px;flex-shrink:0}
 .ibt:hover{color:var(--text);border-color:var(--border2)}
-.ibt.del:hover{background:var(--danger-bg);color:var(--danger);border-color:#fecaca}
+.ibt.dl:hover{background:var(--dangerbg);color:var(--danger);border-color:#fecaca}
 .mov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:200;align-items:center;justify-content:center;padding:20px}
 .mov.open{display:flex}
 .md{background:var(--bg2);border:1px solid var(--border);border-radius:16px;width:100%;max-width:560px;max-height:90vh;overflow-y:auto;padding:24px;box-shadow:0 8px 40px rgba(0,0,0,.12)}
@@ -119,44 +102,31 @@ tbody tr:hover td{background:var(--bg3)}
 .pfill{height:100%;background:var(--red);border-radius:3px}
 .empty{text-align:center;padding:40px;color:var(--text3)}
 .empty span{font-size:36px;display:block;margin-bottom:10px}
+.share-box{background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:18px}
+.share-box h4{font-size:13px;font-weight:700;color:var(--text);margin-bottom:6px}
+.share-box p{font-size:12px;color:var(--text3);margin-bottom:12px}
 ::-webkit-scrollbar{width:5px;height:5px}
 ::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
-@media(max-width:900px){
-  .sidebar{width:56px;min-width:56px}
-  .sidebar-logo h2,.sidebar-logo small,.ns,.ni span,.uchip .uinfo{display:none}
-  .ni{justify-content:center;padding:10px}
-  .cgrid{grid-template-columns:1fr 1fr}
-  .crow{grid-template-columns:1fr}
-  .pgrid{grid-template-columns:1fr}
-  .fgrid{grid-template-columns:1fr}
-}
-@media(max-width:600px){.content{padding:14px}.topbar{padding:10px 14px}}
+@media(max-width:900px){.sb{width:56px;min-width:56px}.sblogo h2,.sblogo small,.ns,.ni span,.uchip .uinfo{display:none}.ni{justify-content:center;padding:10px}.cgrid{grid-template-columns:1fr 1fr}.crow{grid-template-columns:1fr}.pgrid{grid-template-columns:1fr}.fgrid{grid-template-columns:1fr}}
+@media(max-width:600px){.ct{padding:14px}.topbar{padding:10px 14px}}
 </style>
 </head>
 <body>
 
-<div id="loading-screen">
-  <div class="spinner"></div>
-  <div style="font-size:13px;color:var(--text3)">Conectando ao banco de dados...</div>
-</div>
-
-<div id="login-screen">
-  <div class="login-box">
-    <div class="login-logo">
-      <h1>LeadFlow CRM</h1>
-      <p>Gestão Comercial de Leads</p>
-    </div>
-    <div id="lerr" class="err-msg"></div>
-    <div class="form-group"><label>Usuário</label><input id="iu" placeholder="admin" onkeydown="if(event.key==='Enter')login()"></div>
-    <div class="form-group"><label>Senha</label><input id="ip" type="password" placeholder="••••" onkeydown="if(event.key==='Enter')login()"></div>
-    <button class="btn btn-p" style="width:100%;justify-content:center;padding:11px;font-size:14px;margin-top:4px" onclick="login()">▶ Entrar</button>
-    <p class="login-hint">Usuário: <b>admin</b> &nbsp;·&nbsp; Senha: <b>1234</b></p>
+<div id="login">
+  <div class="lbox">
+    <div class="llogo"><h1>LeadFlow CRM</h1><p>Gestão Comercial de Leads</p></div>
+    <div id="lerr" class="lerr"></div>
+    <div class="fg"><label>Usuário</label><input id="iu" placeholder="admin" onkeydown="if(event.key==='Enter')doLogin()"></div>
+    <div class="fg"><label>Senha</label><input id="ip" type="password" placeholder="••••" onkeydown="if(event.key==='Enter')doLogin()"></div>
+    <button class="btn btnp" style="width:100%;justify-content:center;padding:11px;font-size:14px;margin-top:4px" onclick="doLogin()">▶ Entrar</button>
+    <p class="lhint">Usuário: <b>admin</b> &nbsp;·&nbsp; Senha: <b>1234</b></p>
   </div>
 </div>
 
 <div id="app">
-  <div class="sidebar">
-    <div class="sidebar-logo"><h2>LeadFlow</h2><small>CRM Comercial</small></div>
+  <div class="sb">
+    <div class="sblogo"><h2>LeadFlow</h2><small>CRM Comercial</small></div>
     <nav class="snav">
       <div class="ns">Menu</div>
       <div class="ni on" onclick="goTo('dashboard',this)"><span class="ic">📊</span><span>Dashboard</span></div>
@@ -164,555 +134,350 @@ tbody tr:hover td{background:var(--bg3)}
       <div class="ni" onclick="goTo('performance',this)"><span class="ic">🏆</span><span>Performance</span></div>
       <div class="ni" onclick="goTo('relatorios',this)"><span class="ic">📋</span><span>Relatórios</span></div>
       <div class="ni" onclick="goTo('config',this)"><span class="ic">⚙️</span><span>Consultores</span></div>
+      <div class="ni" onclick="goTo('compartilhar',this)"><span class="ic">🔗</span><span>Compartilhar</span></div>
     </nav>
-    <div class="sfooter">
+    <div class="sbfoot">
       <div class="uchip">
         <div class="av">AD</div>
-        <div class="uinfo"><div style="font-size:12px;font-weight:600;color:var(--text)">Admin</div><div style="font-size:10px;color:var(--text3)">● Online</div></div>
+        <div class="uinfo"><div style="font-size:12px;font-weight:600;color:var(--text)">Admin</div><div style="font-size:10px;color:var(--text3)">Gerente</div></div>
       </div>
     </div>
   </div>
 
   <div class="main">
     <div class="topbar">
-      <div class="topbar-title" id="ptitle">Dashboard</div>
+      <div class="tbtitle" id="ptitle">Dashboard</div>
       <div class="sbox" id="swrap" style="display:none"><span>🔍</span><input id="sinp" placeholder="Buscar nome ou telefone..." oninput="renderLeads()"></div>
       <div class="tright">
-        <span id="sbadge" class="sbadge" style="display:none"></span>
-        <button class="btn btn-p" id="bnl" style="display:none" onclick="openModal()">+ Novo Lead</button>
-        <button class="btn" onclick="logout()">↩ Sair</button>
+        <span id="sbdg" class="sbdg" style="display:none"></span>
+        <button class="btn btnp" id="bnl" style="display:none" onclick="openModal()">+ Novo Lead</button>
+        <button class="btn" onclick="doLogout()">↩ Sair</button>
       </div>
     </div>
-    <div class="content">
+    <div class="ct">
 
       <div class="page on" id="page-dashboard">
-        <div class="cgrid" id="krow1"></div>
-        <div class="cgrid" id="krow2"></div>
+        <div class="cgrid" id="kr1"></div>
+        <div class="cgrid" id="kr2"></div>
         <div class="crow">
           <div class="ccard"><h3>Evolução de Leads</h3><p>Leads vs fechamentos — 30 dias</p><div id="achrt"></div></div>
           <div class="ccard"><h3>Status dos Leads</h3><p>Distribuição atual</p><div id="pchrt"></div></div>
         </div>
-        <div class="ccard" style="margin-bottom:18px"><h3>Leads por Canal de Origem</h3><p>Volume por fonte</p><div id="bchrt"></div></div>
+        <div class="ccard" style="margin-bottom:18px"><h3>Leads por Canal</h3><p>Volume por origem</p><div id="bchrt"></div></div>
       </div>
 
       <div class="page" id="page-leads">
         <div class="fbar">
           <div class="ftabs">
-            <button class="ftab on" onclick="setPeriod('hoje',this)">Hoje</button>
-            <button class="ftab" onclick="setPeriod('semana',this)">Semana</button>
-            <button class="ftab" onclick="setPeriod('mes',this)">Mês</button>
-            <button class="ftab" onclick="setPeriod('todos',this)">Todos</button>
+            <button class="ftab on" onclick="setPer('hoje',this)">Hoje</button>
+            <button class="ftab" onclick="setPer('semana',this)">Semana</button>
+            <button class="ftab" onclick="setPer('mes',this)">Mês</button>
+            <button class="ftab" onclick="setPer('todos',this)">Todos</button>
           </div>
           <select class="fsel" id="fst" onchange="renderLeads()"><option value="">Todos os status</option><option>Novo</option><option>Em Atendimento</option><option>Negociação</option><option>Fechado</option><option>Perdido</option></select>
           <select class="fsel" id="fcon" onchange="renderLeads()"><option value="">Todos os consultores</option></select>
-          <div class="cbadge" id="lcnt">0 leads</div>
+          <div class="cbdg" id="lcnt">0 leads</div>
         </div>
-        <div class="tcard"><div class="tscroll"><table>
+        <div class="tcard"><div class="tscr"><table>
           <thead><tr><th>Nome</th><th>Telefone</th><th>Cidade</th><th>Produto</th><th>Origem</th><th>Consultor</th><th>Data</th><th>Status</th><th></th></tr></thead>
-          <tbody id="ltbody"></tbody>
+          <tbody id="ltb"></tbody>
         </table></div></div>
       </div>
 
       <div class="page" id="page-performance">
         <div class="pgrid" id="ptop3"></div>
-        <div class="ccard" style="margin-bottom:14px"><h3>Performance por Consultor — mês atual</h3><p>Leads vs fechamentos</p><div id="pbchrt"></div></div>
+        <div class="ccard" style="margin-bottom:14px"><h3>Performance por Consultor</h3><p>Mês atual</p><div id="pbchrt"></div></div>
         <div class="rlist"><div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:14px">Ranking Completo</div><div id="rfull"></div></div>
       </div>
 
       <div class="page" id="page-relatorios">
         <div style="display:flex;gap:10px;margin-bottom:18px">
-          <button class="btn btn-s" onclick="exportCSV()">📥 Exportar CSV</button>
+          <button class="btn btns" onclick="exportCSV()">📥 Exportar CSV</button>
           <button class="btn" onclick="window.print()">🖨 Imprimir</button>
         </div>
         <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:18px" id="rcards"></div>
         <div class="tcard">
           <div style="padding:14px 18px;border-bottom:1px solid var(--border);font-size:13px;font-weight:700;color:var(--text)">Leads por Canal de Origem</div>
-          <div class="tscroll"><table><thead><tr><th>Origem</th><th>Total</th><th>Fechados</th><th>Conversão</th><th>Share</th></tr></thead><tbody id="rtbody"></tbody></table></div>
+          <div class="tscr"><table><thead><tr><th>Origem</th><th>Total</th><th>Fechados</th><th>Conversão</th><th>Share</th></tr></thead><tbody id="rtb"></tbody></table></div>
         </div>
       </div>
 
       <div class="page" id="page-config">
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px">
           <div><div style="font-size:15px;font-weight:700;color:var(--text)">Gerenciar Consultores</div><div style="font-size:12px;color:var(--text3);margin-top:2px">Adicione, edite ou remova vendedores</div></div>
-          <button class="btn btn-p" onclick="openAddCons()">+ Novo Consultor</button>
+          <button class="btn btnp" onclick="openAddCons()">+ Novo Consultor</button>
         </div>
-        <div class="tcard"><div class="tscroll"><table>
+        <div class="tcard"><div class="tscr"><table>
           <thead><tr><th>#</th><th>Nome</th><th>Leads</th><th>Fechados</th><th>Conversão</th><th></th></tr></thead>
-          <tbody id="ctbody"></tbody>
+          <tbody id="ctb"></tbody>
         </table></div></div>
-        <div style="margin-top:14px;padding:14px;background:var(--bg3);border-radius:12px;font-size:12px;color:var(--text3);border:1px solid var(--border)">⚠️ Ao excluir um consultor, os leads associados ficam sem atribuição.</div>
+        <div style="margin-top:14px;padding:14px;background:var(--bg3);border-radius:12px;font-size:12px;color:var(--text3);border:1px solid var(--border)">⚠️ Ao excluir, os leads associados ficam sem atribuição.</div>
+      </div>
+
+      <div class="page" id="page-compartilhar">
+        <div class="share-box">
+          <h4>📤 Exportar dados para compartilhar</h4>
+          <p>Exporte todos os dados em um arquivo e envie para sua equipe importar.</p>
+          <button class="btn btnp" onclick="exportarDados()">⬇ Baixar arquivo de dados</button>
+        </div>
+        <div class="share-box">
+          <h4>📥 Importar dados de outro dispositivo</h4>
+          <p>Recebeu um arquivo de dados de outro computador? Importe aqui para sincronizar.</p>
+          <input type="file" id="importFile" accept=".json" style="display:none" onchange="importarDados(this)">
+          <button class="btn" onclick="document.getElementById('importFile').click()">⬆ Escolher arquivo para importar</button>
+        </div>
+        <div style="background:var(--bg3);border-radius:12px;padding:16px;border:1px solid var(--border)">
+          <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:8px">💡 Como compartilhar com a equipe</div>
+          <div style="font-size:12px;color:var(--text2);line-height:1.8">
+            1. No computador principal, clique em <b>"Baixar arquivo de dados"</b><br>
+            2. Envie o arquivo por WhatsApp ou e-mail para a equipe<br>
+            3. Cada pessoa clica em <b>"Escolher arquivo para importar"</b><br>
+            4. Repita sempre que quiser sincronizar os dados
+          </div>
+        </div>
       </div>
 
     </div>
   </div>
 </div>
 
-<!-- MODAL LEAD -->
+<!-- MODAIS -->
 <div class="mov" id="mlead">
   <div class="md">
     <div class="mhdr"><h3 id="mtitle">Novo Lead</h3><div class="ibt" onclick="closeModal()">✕</div></div>
     <div class="fgrid">
-      <div class="form-group ffc"><label>Nome *</label><input id="fn" placeholder="Nome completo"></div>
-      <div class="form-group"><label>Telefone</label><input id="ft" placeholder="(00) 90000-0000"></div>
-      <div class="form-group"><label>Cidade</label><input id="fc" placeholder="Cidade"></div>
-      <div class="form-group"><label>Produto</label><select id="fp"><option value="">Selecionar</option><option>Plano Premium</option><option>Plano Básico</option><option>Consultoria</option><option>Treinamento</option><option>Software Pro</option><option>Licença Anual</option></select></div>
-      <div class="form-group"><label>Origem</label><select id="fo"><option value="">Selecionar</option><option>Facebook</option><option>Instagram</option><option>WhatsApp</option><option>Site</option><option>Indicação</option><option>Google Ads</option><option>TikTok</option></select></div>
-      <div class="form-group"><label>Consultor</label><select id="fco"><option value="">Selecionar</option></select></div>
-      <div class="form-group"><label>Status</label><select id="fs"><option>Novo</option><option>Em Atendimento</option><option>Negociação</option><option>Fechado</option><option>Perdido</option></select></div>
-      <div class="form-group ffc"><label>Observações</label><textarea id="fob" placeholder="Anotações..."></textarea></div>
+      <div class="fg ffc"><label>Nome *</label><input id="fn" placeholder="Nome completo"></div>
+      <div class="fg"><label>Telefone</label><input id="ft" placeholder="(00) 90000-0000"></div>
+      <div class="fg"><label>Cidade</label><input id="fc" placeholder="Cidade"></div>
+      <div class="fg"><label>Produto</label><select id="fp"><option value="">Selecionar</option><option>Plano Premium</option><option>Plano Básico</option><option>Consultoria</option><option>Treinamento</option><option>Software Pro</option><option>Licença Anual</option></select></div>
+      <div class="fg"><label>Origem</label><select id="fo"><option value="">Selecionar</option><option>Facebook</option><option>Instagram</option><option>WhatsApp</option><option>Site</option><option>Indicação</option><option>Google Ads</option><option>TikTok</option></select></div>
+      <div class="fg"><label>Consultor</label><select id="fco"><option value="">Selecionar</option></select></div>
+      <div class="fg"><label>Status</label><select id="fs"><option>Novo</option><option>Em Atendimento</option><option>Negociação</option><option>Fechado</option><option>Perdido</option></select></div>
+      <div class="fg ffc"><label>Observações</label><textarea id="fob" placeholder="Anotações..."></textarea></div>
     </div>
     <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:20px">
       <button class="btn" onclick="closeModal()">Cancelar</button>
-      <button class="btn btn-p" onclick="saveLead()">✓ Salvar</button>
+      <button class="btn btnp" onclick="saveLead()">✓ Salvar</button>
     </div>
   </div>
 </div>
 
-<!-- MODAL DEL LEAD -->
 <div class="mov" id="mdel">
   <div class="md" style="max-width:320px;text-align:center">
     <div style="font-size:40px;margin:10px 0 12px">🗑️</div>
     <div style="font-size:15px;font-weight:700;margin-bottom:6px">Excluir Lead?</div>
     <div style="font-size:12px;color:var(--text3);margin-bottom:20px">Esta ação não pode ser desfeita.</div>
-    <div style="display:flex;gap:10px">
-      <button class="btn" style="flex:1;justify-content:center" onclick="closeDelM()">Cancelar</button>
-      <button class="btn btn-d" style="flex:1;justify-content:center" onclick="confirmDel()">🗑 Excluir</button>
-    </div>
+    <div style="display:flex;gap:10px"><button class="btn" style="flex:1;justify-content:center" onclick="closeDelM()">Cancelar</button><button class="btn btnd" style="flex:1;justify-content:center" onclick="confirmDel()">🗑 Excluir</button></div>
   </div>
 </div>
 
-<!-- MODAL CONSULTOR -->
 <div class="mov" id="mcons">
   <div class="md" style="max-width:400px">
     <div class="mhdr"><h3 id="cmtitle">Novo Consultor</h3><div class="ibt" onclick="closeCons()">✕</div></div>
-    <div class="form-group"><label>Nome completo</label><input id="cname" placeholder="Ex: João Silva" onkeydown="if(event.key==='Enter')saveCons()"></div>
+    <div class="fg"><label>Nome completo</label><input id="cname" placeholder="Ex: João Silva" onkeydown="if(event.key==='Enter')saveCons()"></div>
     <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:16px">
       <button class="btn" onclick="closeCons()">Cancelar</button>
-      <button class="btn btn-p" onclick="saveCons()">✓ Salvar</button>
+      <button class="btn btnp" onclick="saveCons()">✓ Salvar</button>
     </div>
   </div>
 </div>
 
-<!-- MODAL DEL CONSULTOR -->
 <div class="mov" id="mdcons">
   <div class="md" style="max-width:320px;text-align:center">
     <div style="font-size:40px;margin:10px 0 12px">👤</div>
     <div style="font-size:15px;font-weight:700;margin-bottom:6px">Excluir Consultor?</div>
     <div style="font-size:12px;color:var(--text3);margin-bottom:20px">Os leads associados ficam sem atribuição.</div>
-    <div style="display:flex;gap:10px">
-      <button class="btn" style="flex:1;justify-content:center" onclick="closeDelCons()">Cancelar</button>
-      <button class="btn btn-d" style="flex:1;justify-content:center" onclick="confirmDelCons()">Excluir</button>
-    </div>
+    <div style="display:flex;gap:10px"><button class="btn" style="flex:1;justify-content:center" onclick="closeDelC()">Cancelar</button><button class="btn btnd" style="flex:1;justify-content:center" onclick="confirmDelC()">Excluir</button></div>
   </div>
 </div>
 
 <script>
-// ── FIREBASE CONFIG ────────────────────────────────────
-const fbConfig = {
-  apiKey: "AIzaSyDtQTIWFA38O8iikc7TRRQ8g_iR18eY-QU",
-  authDomain: "leadflow-crm-a6e9e.firebaseapp.com",
-  databaseURL: "https://leadflow-crm-a6e9e-default-rtdb.firebaseio.com",
-  projectId: "leadflow-crm-a6e9e",
-  storageBucket: "leadflow-crm-a6e9e.firebasestorage.app",
-  messagingSenderId: "159488219393",
-  appId: "1:159488219393:web:25c82602a3332069c0a300"
-};
-firebase.initializeApp(fbConfig);
-const db = firebase.database();
+const SK='leadflow_v2';
+const ORIG=['Facebook','Instagram','WhatsApp','Site','Indicação','Google Ads','TikTok'];
+const OCOL={Facebook:'#4267B2',Instagram:'#E1306C',WhatsApp:'#25D366',Site:'#e02020','Indicação':'#d97706','Google Ads':'#DB4437',TikTok:'#69C9D0'};
+const SBST={'Novo':{bg:'#fdeaea',col:'#e02020'},'Em Atendimento':{bg:'#fffbeb',col:'#d97706'},'Negociação':{bg:'#f5f3ff',col:'#7c3aed'},'Fechado':{bg:'#f0faf4',col:'#16a34a'},'Perdido':{bg:'#fef2f2',col:'#dc2626'}};
 
-// ── CONSTANTES ─────────────────────────────────────────
-const ORIG = ['Facebook','Instagram','WhatsApp','Site','Indicação','Google Ads','TikTok'];
-const OCOL = {Facebook:'#4267B2',Instagram:'#E1306C',WhatsApp:'#25D366',Site:'#e02020','Indicação':'#d97706','Google Ads':'#DB4437',TikTok:'#69C9D0'};
-const SBST = {
-  'Novo':          {bg:'#fdeaea',col:'#e02020'},
-  'Em Atendimento':{bg:'#fffbeb',col:'#d97706'},
-  'Negociação':    {bg:'#f5f3ff',col:'#7c3aed'},
-  'Fechado':       {bg:'#f0faf4',col:'#16a34a'},
-  'Perdido':       {bg:'#fef2f2',col:'#dc2626'},
-};
-
-// ── ESTADO ─────────────────────────────────────────────
-let leads=[], cons=[], period='hoje', editLeadKey=null, delLeadKey=null, editConsIdx=null, delConsIdx=null, curPage='dashboard';
+let DB={leads:[],cons:[]};
+let period='hoje',editLeadId=null,delLeadId=null,editConsIdx=null,delConsIdx=null,curPage='dashboard';
 
 function hj(){return new Date().toISOString().split('T')[0]}
 function dag(n){const d=new Date();d.setDate(d.getDate()-n);return d.toISOString().split('T')[0]}
-function fmtd(s){return new Date(s+'T12:00:00').toLocaleDateString('pt-BR')}
+function fmtd(s){try{return new Date(s+'T12:00:00').toLocaleDateString('pt-BR');}catch(e){return s;}}
 
-// ── SYNC BADGE ─────────────────────────────────────────
-function sync(msg,type='saving'){
-  const b=document.getElementById('sbadge');
-  b.textContent=msg;b.className='sbadge '+type;b.style.display='inline-flex';
-  if(type==='ok')setTimeout(()=>b.style.display='none',2500);
-}
+function loadDB(){try{const s=localStorage.getItem(SK);if(s){const p=JSON.parse(s);if(p.leads)DB=p;}}catch(e){}}
+function saveDB(){try{localStorage.setItem(SK,JSON.stringify(DB));showSaved();}catch(e){}}
+function showSaved(){const b=document.getElementById('sbdg');b.textContent='✓ Salvo';b.className='sbdg ok';b.style.display='inline-flex';setTimeout(()=>b.style.display='none',2000);}
 
-// ── LISTENERS EM TEMPO REAL ────────────────────────────
-function startListeners(){
-  db.ref('leads').on('value', snap=>{
-    leads=[];
-    snap.forEach(c=>leads.push({key:c.key,...c.val()}));
-    leads.sort((a,b)=>(b.id||0)-(a.id||0));
-    sync('✓ Sincronizado','ok');
-    redraw();
-  }, err=>{
-    sync('Sem conexão','err');
-    alert('Erro ao conectar ao banco de dados: '+err.message+'\n\nVerifique as regras do Firebase.');
-  });
-  db.ref('consultores').on('value', snap=>{
-    cons=[];
-    snap.forEach(c=>cons.push({key:c.key,nome:c.val().nome}));
-    refreshSels();
-    if(curPage==='config')renderConfig();
-  }, err=>{
-    console.error('Erro consultores:', err);
-  });
+function doLogin(){
+  const u=document.getElementById('iu').value,p=document.getElementById('ip').value,e=document.getElementById('lerr');
+  if(u==='admin'&&p==='1234'){localStorage.setItem('lf_auth','1');showApp();}
+  else{e.style.display='block';e.textContent='Usuário ou senha incorretos.';}
 }
+function showApp(){document.getElementById('login').classList.remove('v');document.getElementById('app').classList.add('v');refreshSels();renderDash();}
+function doLogout(){localStorage.removeItem('lf_auth');document.getElementById('app').classList.remove('v');document.getElementById('login').classList.add('v');document.getElementById('ip').value='';}
 
-function redraw(){
-  if(curPage==='dashboard')   renderDash();
-  if(curPage==='leads')       renderLeads();
-  if(curPage==='performance') renderPerf();
-  if(curPage==='relatorios')  renderRel();
-}
-
-// ── AUTH ───────────────────────────────────────────────
-function login(){
-  const u=document.getElementById('iu').value;
-  const p=document.getElementById('ip').value;
-  const e=document.getElementById('lerr');
-  if(u==='admin'&&p==='1234'){
-    localStorage.setItem('lf_logged','1');
-    showApp();
-  } else {
-    e.style.display='block';e.textContent='Usuário ou senha incorretos.';
-  }
-}
-function showApp(){
-  document.getElementById('login-screen').classList.remove('visible');
-  document.getElementById('app').classList.add('visible');
-  startListeners();
-}
-function logout(){
-  localStorage.removeItem('lf_logged');
-  document.getElementById('app').classList.remove('visible');
-  document.getElementById('login-screen').classList.add('visible');
-  document.getElementById('ip').value='';
-}
-
-// ── NAV ────────────────────────────────────────────────
 function goTo(page,el){
-  document.querySelectorAll('.ni').forEach(x=>x.classList.remove('on'));
-  el.classList.add('on');
-  document.querySelectorAll('.page').forEach(x=>x.classList.remove('on'));
-  document.getElementById('page-'+page).classList.add('on');
-  const titles={dashboard:'Dashboard',leads:'Leads',performance:'Performance',relatorios:'Relatórios',config:'Consultores'};
-  document.getElementById('ptitle').textContent=titles[page]||page;
+  document.querySelectorAll('.ni').forEach(x=>x.classList.remove('on'));el.classList.add('on');
+  document.querySelectorAll('.page').forEach(x=>x.classList.remove('on'));document.getElementById('page-'+page).classList.add('on');
+  const tt={dashboard:'Dashboard',leads:'Leads',performance:'Performance',relatorios:'Relatórios',config:'Consultores',compartilhar:'Compartilhar'};
+  document.getElementById('ptitle').textContent=tt[page]||page;
   document.getElementById('swrap').style.display=page==='leads'?'flex':'none';
   document.getElementById('bnl').style.display=page==='leads'?'inline-flex':'none';
   curPage=page;
-  if(page==='dashboard')   renderDash();
-  if(page==='leads')       renderLeads();
-  if(page==='performance') renderPerf();
-  if(page==='relatorios')  renderRel();
-  if(page==='config')      renderConfig();
+  if(page==='dashboard')renderDash();if(page==='leads')renderLeads();
+  if(page==='performance')renderPerf();if(page==='relatorios')renderRel();
+  if(page==='config')renderConfig();
 }
-
-function setPeriod(p,el){
-  period=p;
-  document.querySelectorAll('.ftab').forEach(x=>x.classList.remove('on'));
-  el.classList.add('on');
-  renderLeads();
-}
-
-function getFiltered(){
-  let r=leads;
+function setPer(p,el){period=p;document.querySelectorAll('.ftab').forEach(x=>x.classList.remove('on'));el.classList.add('on');renderLeads();}
+function getFilt(){
+  let r=DB.leads;
   const b=(document.getElementById('sinp')||{value:''}).value.toLowerCase();
   const fs=(document.getElementById('fst')||{value:''}).value;
   const fc=(document.getElementById('fcon')||{value:''}).value;
-  if(b) r=r.filter(l=>(l.nome||'').toLowerCase().includes(b)||(l.telefone||'').includes(b));
-  if(fs) r=r.filter(l=>l.status===fs);
-  if(fc) r=r.filter(l=>l.consultor===fc);
-  if(period==='hoje')   r=r.filter(l=>l.data===hj());
-  else if(period==='semana') r=r.filter(l=>l.data>=dag(7));
-  else if(period==='mes')    r=r.filter(l=>l.data>=dag(30));
+  if(b)r=r.filter(l=>(l.nome||'').toLowerCase().includes(b)||(l.telefone||'').includes(b));
+  if(fs)r=r.filter(l=>l.status===fs);if(fc)r=r.filter(l=>l.consultor===fc);
+  if(period==='hoje')r=r.filter(l=>l.data===hj());
+  else if(period==='semana')r=r.filter(l=>l.data>=dag(7));
+  else if(period==='mes')r=r.filter(l=>l.data>=dag(30));
   return r;
 }
 
-// ── DASHBOARD ──────────────────────────────────────────
 function renderDash(){
-  const hoje=hj();
-  const lhj=leads.filter(l=>l.data===hoje);
-  const fhj=lhj.filter(l=>l.status==='Fechado');
-  const phj=lhj.filter(l=>l.status==='Perdido');
-  const tx=v=>lhj.length?Math.round(v/lhj.length*100):0;
-  const mes=leads.filter(l=>l.data>=dag(30));
-  const fmes=mes.filter(l=>l.status==='Fechado');
+  const hoje=hj(),lhj=DB.leads.filter(l=>l.data===hoje),fhj=lhj.filter(l=>l.status==='Fechado'),phj=lhj.filter(l=>l.status==='Perdido');
+  const tx=lhj.length?Math.round(fhj.length/lhj.length*100):0;
+  const mes=DB.leads.filter(l=>l.data>=dag(30)),fmes=mes.filter(l=>l.status==='Fechado');
   const txm=mes.length?Math.round(fmes.length/mes.length*100):0;
-
-  function kpi(ic,bg,col,lb,val,sub){
-    return`<div class="kcard"><div class="kicon" style="background:${bg};color:${col}">${ic}</div><div class="klabel">${lb}</div><div class="kval" style="color:${col}">${val}</div><div class="ksub">${sub}</div></div>`;
-  }
-  document.getElementById('krow1').innerHTML=
-    kpi('👥','#fdeaea','#e02020','Leads Hoje',lhj.length,'recebidos hoje')+
-    kpi('✅','#f0faf4','#16a34a','Fechados Hoje',fhj.length,'vendas confirmadas')+
-    kpi('❌','#fef2f2','#dc2626','Perdidos Hoje',phj.length,'não convertidos')+
-    kpi('📈','#f5f3ff','#7c3aed','Conversão Hoje',tx(fhj.length)+'%',txm+'% no mês');
-  document.getElementById('krow2').innerHTML=
-    kpi('📅','#f0fdfa','#0d9488','Leads no Mês',mes.length,'últimos 30 dias')+
-    kpi('🏅','#fffbeb','#d97706','Fechados Mês',fmes.length,txm+'% conversão')+
-    kpi('💾','#fdeaea','#e02020','Total Geral',leads.length,'base completa')+
-    kpi('🔥','#f5f3ff','#7c3aed','Em Negociação',leads.filter(l=>l.status==='Negociação').length,'oportunidades ativas');
-
-  // Área
-  const days=Array.from({length:30},(_,i)=>{
-    const d=dag(29-i);const dl=leads.filter(l=>l.data===d);
-    return{lb:new Date(d+'T12:00:00').toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit'}),t:dl.length,f:dl.filter(l=>l.status==='Fechado').length};
-  });
-  const maxV=Math.max(...days.map(x=>x.t),1);
-  const W=600,H=150,PL=30,PR=10,PT=10,PB=28,cw=W-PL-PR,ch=H-PT-PB;
-  const px=i=>PL+i*(cw/(days.length-1));
-  const py=v=>PT+ch-(v/maxV*ch);
+  function kpi(ic,bg,col,lb,val,sub){return`<div class="kcard"><div class="kicon" style="background:${bg};color:${col}">${ic}</div><div class="klbl">${lb}</div><div class="kval" style="color:${col}">${val}</div><div class="ksub">${sub}</div></div>`;}
+  document.getElementById('kr1').innerHTML=kpi('👥','#fdeaea','#e02020','Leads Hoje',lhj.length,'recebidos hoje')+kpi('✅','#f0faf4','#16a34a','Fechados Hoje',fhj.length,'vendas confirmadas')+kpi('❌','#fef2f2','#dc2626','Perdidos Hoje',phj.length,'não convertidos')+kpi('📈','#f5f3ff','#7c3aed','Conversão Hoje',tx+'%',txm+'% no mês');
+  document.getElementById('kr2').innerHTML=kpi('📅','#f0fdfa','#0d9488','Leads no Mês',mes.length,'últimos 30 dias')+kpi('🏅','#fffbeb','#d97706','Fechados Mês',fmes.length,txm+'% conversão')+kpi('💾','#fdeaea','#e02020','Total Geral',DB.leads.length,'base completa')+kpi('🔥','#f5f3ff','#7c3aed','Em Negociação',DB.leads.filter(l=>l.status==='Negociação').length,'oportunidades ativas');
+  const days=Array.from({length:30},(_,i)=>{const d=dag(29-i);const dl=DB.leads.filter(l=>l.data===d);return{lb:new Date(d+'T12:00:00').toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit'}),t:dl.length,f:dl.filter(l=>l.status==='Fechado').length};});
+  const maxV=Math.max(...days.map(x=>x.t),1);const W=600,H=150,PL=30,PR=10,PT=10,PB=28,cw=W-PL-PR,ch=H-PT-PB;
+  const px=i=>PL+i*(cw/(days.length-1));const py=v=>PT+ch-(v/maxV*ch);
   const lT=days.map((d,i)=>`${i===0?'M':'L'}${px(i).toFixed(1)},${py(d.t).toFixed(1)}`).join(' ');
   const lF=days.map((d,i)=>`${i===0?'M':'L'}${px(i).toFixed(1)},${py(d.f).toFixed(1)}`).join(' ');
   const aT=lT+` L${px(29).toFixed(1)},${(PT+ch).toFixed(1)} L${PL},${(PT+ch).toFixed(1)} Z`;
   const aF=lF+` L${px(29).toFixed(1)},${(PT+ch).toFixed(1)} L${PL},${(PT+ch).toFixed(1)} Z`;
-  const labX=days.filter((_,i)=>i%5===0||i===29).map((_,__,a)=>{const i=days.indexOf(_);return`<text x="${px(i).toFixed(1)}" y="${H-4}" text-anchor="middle" fill="#9098a5" font-size="9">${_.lb}</text>`;}).join('');
+  const labX=days.filter((_,i)=>i%5===0||i===29).map(_=>{const i=days.indexOf(_);return`<text x="${px(i).toFixed(1)}" y="${H-4}" text-anchor="middle" fill="#9098a5" font-size="9">${_.lb}</text>`;}).join('');
   const labY=[0,Math.round(maxV/2),maxV].map(v=>`<text x="${PL-4}" y="${py(v)+3}" text-anchor="end" fill="#9098a5" font-size="9">${v}</text><line x1="${PL}" y1="${py(v)}" x2="${W-PR}" y2="${py(v)}" stroke="#e0e2e7" stroke-dasharray="3,3"/>`).join('');
-  document.getElementById('achrt').innerHTML=`<svg viewBox="0 0 ${W} ${H}" class="svg-chart">
-    <defs><linearGradient id="gA" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#e02020" stop-opacity=".15"/><stop offset="100%" stop-color="#e02020" stop-opacity="0"/></linearGradient>
-    <linearGradient id="gB" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#16a34a" stop-opacity=".15"/><stop offset="100%" stop-color="#16a34a" stop-opacity="0"/></linearGradient></defs>
-    ${labY}${labX}
-    <path d="${aT}" fill="url(#gA)"/><path d="${aF}" fill="url(#gB)"/>
-    <path d="${lT}" fill="none" stroke="#e02020" stroke-width="2" stroke-linejoin="round"/>
-    <path d="${lF}" fill="none" stroke="#16a34a" stroke-width="2" stroke-linejoin="round"/>
-    <circle cx="12" cy="12" r="4" fill="#e02020"/><text x="20" y="16" fill="#5a6270" font-size="10">Leads</text>
-    <circle cx="70" cy="12" r="4" fill="#16a34a"/><text x="78" y="16" fill="#5a6270" font-size="10">Fechados</text></svg>`;
-
-  // Pie
-  const sts=[{n:'Novo',v:leads.filter(l=>l.status==='Novo').length,c:'#e02020'},{n:'Em Atend.',v:leads.filter(l=>l.status==='Em Atendimento').length,c:'#d97706'},{n:'Negoc.',v:leads.filter(l=>l.status==='Negociação').length,c:'#7c3aed'},{n:'Fechado',v:leads.filter(l=>l.status==='Fechado').length,c:'#16a34a'},{n:'Perdido',v:leads.filter(l=>l.status==='Perdido').length,c:'#dc2626'}];
-  const tot=sts.reduce((s,x)=>s+x.v,0)||1;
-  let ang=-Math.PI/2,slices='';
-  sts.forEach(s=>{
-    const a=s.v/tot*2*Math.PI,cx=85,cy=75,R=55,Ri=32;
-    const x1=cx+R*Math.cos(ang),y1=cy+R*Math.sin(ang),x2=cx+R*Math.cos(ang+a),y2=cy+R*Math.sin(ang+a);
-    const xi1=cx+Ri*Math.cos(ang),yi1=cy+Ri*Math.sin(ang),xi2=cx+Ri*Math.cos(ang+a),yi2=cy+Ri*Math.sin(ang+a);
-    if(s.v>0)slices+=`<path d="M${xi1.toFixed(1)},${yi1.toFixed(1)} L${x1.toFixed(1)},${y1.toFixed(1)} A${R},${R} 0 ${a>Math.PI?1:0} 1 ${x2.toFixed(1)},${y2.toFixed(1)} L${xi2.toFixed(1)},${yi2.toFixed(1)} A${Ri},${Ri} 0 ${a>Math.PI?1:0} 0 ${xi1.toFixed(1)},${yi1.toFixed(1)}" fill="${s.c}" opacity=".85"/>`;
-    ang+=a;
-  });
-  document.getElementById('pchrt').innerHTML=`<svg viewBox="0 0 170 150" class="svg-chart" style="max-height:140px">${slices}</svg><div style="margin-top:4px">${sts.map(s=>`<div style="display:flex;align-items:center;justify-content:space-between;font-size:11px;padding:3px 0"><span style="display:flex;align-items:center;gap:6px"><span style="width:7px;height:7px;border-radius:50%;background:${s.c};display:inline-block"></span><span style="color:#9098a5">${s.n}</span></span><span style="font-weight:700;color:#1a1d23">${s.v}</span></div>`).join('')}</div>`;
-
-  // Bar origens
-  const od=ORIG.map(o=>({n:o,v:leads.filter(l=>l.origem===o).length})).filter(x=>x.v>0).sort((a,b)=>b.v-a.v);
-  const maxB=Math.max(...od.map(x=>x.v),1);
-  const BW=600,BH=130,bw=Math.min(44,(BW/Math.max(od.length,1))-10);
-  const bars=od.map((o,i)=>{
-    const h=(o.v/maxB)*(BH-38);const x=(BW/od.length)*i+(BW/od.length)/2-bw/2;const y=10+(BH-38)-h;
-    return`<rect x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${bw}" height="${h.toFixed(1)}" fill="${OCOL[o.n]||'#e02020'}" rx="4"/><text x="${(x+bw/2).toFixed(1)}" y="${BH-4}" text-anchor="middle" fill="#9098a5" font-size="8">${o.n.slice(0,7)}</text><text x="${(x+bw/2).toFixed(1)}" y="${(y-4).toFixed(1)}" text-anchor="middle" fill="#5a6270" font-size="9">${o.v}</text>`;
-  }).join('');
-  document.getElementById('bchrt').innerHTML=`<svg viewBox="0 0 ${BW} ${BH}" class="svg-chart">${bars}</svg>`;
+  document.getElementById('achrt').innerHTML=`<svg viewBox="0 0 ${W} ${H}" class="svgc"><defs><linearGradient id="gA" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#e02020" stop-opacity=".15"/><stop offset="100%" stop-color="#e02020" stop-opacity="0"/></linearGradient><linearGradient id="gB" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#16a34a" stop-opacity=".15"/><stop offset="100%" stop-color="#16a34a" stop-opacity="0"/></linearGradient></defs>${labY}${labX}<path d="${aT}" fill="url(#gA)"/><path d="${aF}" fill="url(#gB)"/><path d="${lT}" fill="none" stroke="#e02020" stroke-width="2" stroke-linejoin="round"/><path d="${lF}" fill="none" stroke="#16a34a" stroke-width="2" stroke-linejoin="round"/><circle cx="12" cy="12" r="4" fill="#e02020"/><text x="20" y="16" fill="#5a6270" font-size="10">Leads</text><circle cx="70" cy="12" r="4" fill="#16a34a"/><text x="78" y="16" fill="#5a6270" font-size="10">Fechados</text></svg>`;
+  const sts=[{n:'Novo',v:DB.leads.filter(l=>l.status==='Novo').length,c:'#e02020'},{n:'Em Atend.',v:DB.leads.filter(l=>l.status==='Em Atendimento').length,c:'#d97706'},{n:'Negoc.',v:DB.leads.filter(l=>l.status==='Negociação').length,c:'#7c3aed'},{n:'Fechado',v:DB.leads.filter(l=>l.status==='Fechado').length,c:'#16a34a'},{n:'Perdido',v:DB.leads.filter(l=>l.status==='Perdido').length,c:'#dc2626'}];
+  const tot=sts.reduce((s,x)=>s+x.v,0)||1;let ang=-Math.PI/2,slcs='';
+  sts.forEach(s=>{const a=s.v/tot*2*Math.PI,cx=85,cy=75,R=55,Ri=32;const x1=cx+R*Math.cos(ang),y1=cy+R*Math.sin(ang),x2=cx+R*Math.cos(ang+a),y2=cy+R*Math.sin(ang+a);const xi1=cx+Ri*Math.cos(ang),yi1=cy+Ri*Math.sin(ang),xi2=cx+Ri*Math.cos(ang+a),yi2=cy+Ri*Math.sin(ang+a);if(s.v>0)slcs+=`<path d="M${xi1.toFixed(1)},${yi1.toFixed(1)} L${x1.toFixed(1)},${y1.toFixed(1)} A${R},${R} 0 ${a>Math.PI?1:0} 1 ${x2.toFixed(1)},${y2.toFixed(1)} L${xi2.toFixed(1)},${yi2.toFixed(1)} A${Ri},${Ri} 0 ${a>Math.PI?1:0} 0 ${xi1.toFixed(1)},${yi1.toFixed(1)}" fill="${s.c}" opacity=".85"/>`;ang+=a;});
+  document.getElementById('pchrt').innerHTML=`<svg viewBox="0 0 170 150" class="svgc" style="max-height:140px">${slcs}</svg><div style="margin-top:4px">${sts.map(s=>`<div style="display:flex;align-items:center;justify-content:space-between;font-size:11px;padding:3px 0"><span style="display:flex;align-items:center;gap:6px"><span style="width:7px;height:7px;border-radius:50%;background:${s.c};display:inline-block"></span><span style="color:#9098a5">${s.n}</span></span><span style="font-weight:700;color:#1a1d23">${s.v}</span></div>`).join('')}</div>`;
+  const od=ORIG.map(o=>({n:o,v:DB.leads.filter(l=>l.origem===o).length})).filter(x=>x.v>0).sort((a,b)=>b.v-a.v);
+  const maxB=Math.max(...od.map(x=>x.v),1);const BW=600,BH=130,bw=Math.min(44,(BW/Math.max(od.length,1))-10);
+  const bars=od.map((o,i)=>{const h=(o.v/maxB)*(BH-38);const x=(BW/od.length)*i+(BW/od.length)/2-bw/2;const y=10+(BH-38)-h;return`<rect x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${bw}" height="${h.toFixed(1)}" fill="${OCOL[o.n]||'#e02020'}" rx="4"/><text x="${(x+bw/2).toFixed(1)}" y="${BH-4}" text-anchor="middle" fill="#9098a5" font-size="8">${o.n.slice(0,7)}</text><text x="${(x+bw/2).toFixed(1)}" y="${(y-4).toFixed(1)}" text-anchor="middle" fill="#5a6270" font-size="9">${o.v}</text>`;}).join('');
+  document.getElementById('bchrt').innerHTML=`<svg viewBox="0 0 ${BW} ${BH}" class="svgc">${bars}</svg>`;
 }
 
-// ── LEADS ──────────────────────────────────────────────
 function renderLeads(){
-  const lf=getFiltered();
-  document.getElementById('lcnt').textContent=lf.length+' lead'+(lf.length!==1?'s':'');
-  const tb=document.getElementById('ltbody');
+  const lf=getFilt();document.getElementById('lcnt').textContent=lf.length+' lead'+(lf.length!==1?'s':'');
+  const tb=document.getElementById('ltb');
   if(!lf.length){tb.innerHTML=`<tr><td colspan="9" class="empty"><span>📭</span>Nenhum lead encontrado</td></tr>`;return;}
-  tb.innerHTML=lf.slice(0,100).map(l=>{
-    const sb=SBST[l.status]||SBST['Novo'];
-    const opts=['Novo','Em Atendimento','Negociação','Fechado','Perdido'].map(s=>`<option${s===l.status?' selected':''}>${s}</option>`).join('');
-    return`<tr>
-      <td style="color:#1a1d23;font-weight:600">${l.nome||''}</td>
-      <td style="font-size:11px;color:#9098a5;font-family:monospace">${l.telefone||''}</td>
-      <td>${l.cidade||''}</td>
-      <td style="max-width:110px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${l.produto||''}</td>
-      <td><span class="otag"><span class="dot" style="background:${OCOL[l.origem]||'#888'}"></span>${l.origem||''}</span></td>
-      <td>${(l.consultor||'').split(' ')[0]}</td>
-      <td style="font-size:11px;color:#9098a5">${fmtd(l.data||hj())}</td>
-      <td><select class="ssel" style="background:${sb.bg};color:${sb.col}" onchange="updSt('${l.key}',this.value)">${opts}</select></td>
-      <td><div class="abts"><div class="ibt" onclick="openModal('${l.key}')">✏️</div><div class="ibt del" onclick="askDel('${l.key}')">🗑</div></div></td>
-    </tr>`;
-  }).join('');
+  tb.innerHTML=lf.slice(0,100).map(l=>{const sb=SBST[l.status]||SBST['Novo'];const opts=['Novo','Em Atendimento','Negociação','Fechado','Perdido'].map(s=>`<option${s===l.status?' selected':''}>${s}</option>`).join('');return`<tr><td style="color:#1a1d23;font-weight:600">${l.nome||''}</td><td style="font-size:11px;color:#9098a5;font-family:monospace">${l.telefone||''}</td><td>${l.cidade||''}</td><td style="max-width:110px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${l.produto||''}</td><td><span class="otag"><span class="dot" style="background:${OCOL[l.origem]||'#888'}"></span>${l.origem||''}</span></td><td>${(l.consultor||'').split(' ')[0]}</td><td style="font-size:11px;color:#9098a5">${fmtd(l.data||hj())}</td><td><select class="ssel" style="background:${sb.bg};color:${sb.col}" onchange="updSt(${l.id},this.value)">${opts}</select></td><td><div class="abts"><div class="ibt" onclick="openModal(${l.id})">✏️</div><div class="ibt dl" onclick="askDel(${l.id})">🗑</div></div></td></tr>`;}).join('');
 }
 
-function updSt(key,st){sync('Salvando...','saving');db.ref('leads/'+key).update({status:st});}
+function updSt(id,st){DB.leads=DB.leads.map(l=>l.id===id?{...l,status:st}:l);saveDB();}
 
-// ── MODAL LEAD ─────────────────────────────────────────
-function openModal(key=null){
-  editLeadKey=key;
-  document.getElementById('mtitle').textContent=key?'Editar Lead':'Novo Lead';
-  const l=key?leads.find(x=>x.key===key):{};
-  document.getElementById('fn').value=l.nome||'';
-  document.getElementById('ft').value=l.telefone||'';
-  document.getElementById('fc').value=l.cidade||'';
-  document.getElementById('fp').value=l.produto||'';
-  document.getElementById('fo').value=l.origem||'';
-  document.getElementById('fco').value=l.consultor||'';
-  document.getElementById('fs').value=l.status||'Novo';
-  document.getElementById('fob').value=l.obs||'';
+function openModal(id=null){
+  editLeadId=id;document.getElementById('mtitle').textContent=id?'Editar Lead':'Novo Lead';
+  const l=id?DB.leads.find(x=>x.id===id):{};
+  document.getElementById('fn').value=l.nome||'';document.getElementById('ft').value=l.telefone||'';
+  document.getElementById('fc').value=l.cidade||'';document.getElementById('fp').value=l.produto||'';
+  document.getElementById('fo').value=l.origem||'';document.getElementById('fco').value=l.consultor||'';
+  document.getElementById('fs').value=l.status||'Novo';document.getElementById('fob').value=l.obs||'';
   document.getElementById('mlead').classList.add('open');
 }
 function closeModal(){document.getElementById('mlead').classList.remove('open');}
 function saveLead(){
-  const nome=document.getElementById('fn').value.trim();
-  if(!nome){alert('Informe o nome do cliente.');return;}
-  sync('Salvando...','saving');
+  const nome=document.getElementById('fn').value.trim();if(!nome){alert('Informe o nome.');return;}
   const lead={nome,telefone:document.getElementById('ft').value,cidade:document.getElementById('fc').value,produto:document.getElementById('fp').value,origem:document.getElementById('fo').value,consultor:document.getElementById('fco').value,status:document.getElementById('fs').value,obs:document.getElementById('fob').value};
-  const done=err=>{
-    if(err){alert('Erro ao salvar lead: '+err.message);sync('Erro!','err');}
-    else closeModal();
-  };
-  if(editLeadKey){
-    const ex=leads.find(x=>x.key===editLeadKey);
-    db.ref('leads/'+editLeadKey).set({...lead,id:ex.id,data:ex.data}, done);
-  } else {
-    const newId=leads.length?Math.max(...leads.map(x=>x.id||0))+1:1;
-    db.ref('leads').push({...lead,id:newId,data:hj()}, done);
-  }
+  if(editLeadId){DB.leads=DB.leads.map(l=>l.id===editLeadId?{...l,...lead}:l);}
+  else{const newId=DB.leads.length?Math.max(...DB.leads.map(x=>x.id||0))+1:1;DB.leads=[{...lead,id:newId,data:hj()},...DB.leads];}
+  closeModal();saveDB();renderLeads();
 }
-function askDel(key){delLeadKey=key;document.getElementById('mdel').classList.add('open');}
-function closeDelM(){document.getElementById('mdel').classList.remove('open');delLeadKey=null;}
-function confirmDel(){if(!delLeadKey)return;sync('Removendo...','saving');db.ref('leads/'+delLeadKey).remove();closeDelM();}
+function askDel(id){delLeadId=id;document.getElementById('mdel').classList.add('open');}
+function closeDelM(){document.getElementById('mdel').classList.remove('open');delLeadId=null;}
+function confirmDel(){if(!delLeadId)return;DB.leads=DB.leads.filter(l=>l.id!==delLeadId);closeDelM();saveDB();renderLeads();}
 
-// ── PERFORMANCE ────────────────────────────────────────
 function renderPerf(){
-  const nomes=cons.map(c=>c.nome);
-  const rk=nomes.map(c=>{
-    const cl=leads.filter(l=>l.consultor===c),f=cl.filter(l=>l.status==='Fechado');
-    return{n:c,t:cl.length,f:f.length,tx:cl.length?Math.round(f.length/cl.length*100):0};
-  }).sort((a,b)=>b.f-a.f);
-  const mx=rk[0]?.f||1;
-  const mc=[{c:'#d97706',bg:'#fffbeb'},{c:'#9098a5',bg:'#f1f3f6'},{c:'#b87333',bg:'#fef2f2'}];
-  document.getElementById('ptop3').innerHTML=rk.slice(0,3).map((r,i)=>`
-    <div class="kcard" style="${i===0?'border-color:#d97706;border-width:2px':''}">
-      <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px">
-        <div class="av" style="background:${mc[i]?.bg||'#f1f3f6'};color:${mc[i]?.c||'#9098a5'}">${r.n.split(' ').map(x=>x[0]).join('').slice(0,2)}</div>
-        <div><div style="font-weight:700;font-size:13px;color:#1a1d23">${r.n}</div><div style="font-size:11px;color:#9098a5">#${i+1} ${ ['🥇','🥈','🥉'][i]||''}</div></div>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
-        <div style="background:#f1f3f6;border-radius:7px;padding:8px 10px"><div style="font-size:10px;color:#9098a5;margin-bottom:2px">Fechados</div><div style="font-size:20px;font-weight:800;color:#16a34a">${r.f}</div></div>
-        <div style="background:#f1f3f6;border-radius:7px;padding:8px 10px"><div style="font-size:10px;color:#9098a5;margin-bottom:2px">Conversão</div><div style="font-size:20px;font-weight:800;color:#e02020">${r.tx}%</div></div>
-      </div>
-    </div>`).join('')||'<div style="color:#9098a5;font-size:13px">Cadastre consultores para ver o ranking.</div>';
-
-  const bd=nomes.map(c=>({n:c.split(' ')[0],l:leads.filter(x=>x.consultor===c&&x.data>=dag(30)).length,f:leads.filter(x=>x.consultor===c&&x.status==='Fechado'&&x.data>=dag(30)).length}));
-  const mpb=Math.max(...bd.map(x=>x.l),1);
-  const PBW=600,PBH=150;
-  const pbw=bd.length?Math.min(28,(PBW/bd.length)/2-4):28;
-  const pbars=bd.map((b,i)=>{
-    const hl=(b.l/mpb)*(PBH-40),hf=(b.f/mpb)*(PBH-40),y0=PBH-30,xc=(PBW/bd.length)*i+(PBW/bd.length)/2;
-    return`<rect x="${(xc-pbw-2).toFixed(1)}" y="${(y0-hl).toFixed(1)}" width="${pbw}" height="${hl.toFixed(1)}" fill="#e02020" rx="3"/>
-      <rect x="${(xc+2).toFixed(1)}" y="${(y0-hf).toFixed(1)}" width="${pbw}" height="${hf.toFixed(1)}" fill="#16a34a" rx="3"/>
-      <text x="${xc.toFixed(1)}" y="${PBH-4}" text-anchor="middle" fill="#9098a5" font-size="9">${b.n}</text>`;
-  }).join('');
-  document.getElementById('pbchrt').innerHTML=`<svg viewBox="0 0 ${PBW} ${PBH}" class="svg-chart">
-    ${pbars}<circle cx="12" cy="12" r="4" fill="#e02020"/><text x="20" y="16" fill="#5a6270" font-size="10">Leads</text>
-    <circle cx="70" cy="12" r="4" fill="#16a34a"/><text x="78" y="16" fill="#5a6270" font-size="10">Fechados</text></svg>`;
-
-  document.getElementById('rfull').innerHTML=rk.map((r,i)=>`
-    <div class="rrow">
-      <span style="font-size:13px;font-weight:800;width:20px;color:${i===0?'#d97706':i===1?'#9098a5':i===2?'#b87333':'#9098a5'}">${i+1}</span>
-      <div class="av" style="width:28px;height:28px;font-size:10px">${r.n.split(' ').map(x=>x[0]).join('').slice(0,2)}</div>
-      <div style="flex:1"><div style="font-size:12px;font-weight:600;color:#1a1d23">${r.n}</div><div style="font-size:10px;color:#9098a5">${r.t} leads · ${r.f} fechados</div></div>
-      <div class="pbar" style="max-width:100px"><div class="pfill" style="width:${Math.round(r.f/mx*100)}%"></div></div>
-      <div style="width:36px;text-align:right;font-size:12px;font-weight:700;color:#e02020">${r.tx}%</div>
-    </div>`).join('')||'<div class="empty"><span>👤</span>Sem consultores cadastrados.</div>';
+  const nomes=DB.cons.map(c=>c.nome);
+  const rk=nomes.map(c=>{const cl=DB.leads.filter(l=>l.consultor===c),f=cl.filter(l=>l.status==='Fechado');return{n:c,t:cl.length,f:f.length,tx:cl.length?Math.round(f.length/cl.length*100):0};}).sort((a,b)=>b.f-a.f);
+  const mx=rk[0]?.f||1;const mc=[{c:'#d97706',bg:'#fffbeb'},{c:'#9098a5',bg:'#f1f3f6'},{c:'#b87333',bg:'#fef2f2'}];
+  document.getElementById('ptop3').innerHTML=rk.slice(0,3).map((r,i)=>`<div class="kcard" style="${i===0?'border-color:#d97706;border-width:2px':''}"><div style="display:flex;align-items:center;gap:8px;margin-bottom:12px"><div class="av" style="background:${mc[i]?.bg||'#f1f3f6'};color:${mc[i]?.c||'#9098a5'}">${r.n.split(' ').map(x=>x[0]).join('').slice(0,2)}</div><div><div style="font-weight:700;font-size:13px;color:#1a1d23">${r.n}</div><div style="font-size:11px;color:#9098a5">#${i+1} ${['🥇','🥈','🥉'][i]||''}</div></div></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><div style="background:#f1f3f6;border-radius:7px;padding:8px 10px"><div style="font-size:10px;color:#9098a5;margin-bottom:2px">Fechados</div><div style="font-size:20px;font-weight:800;color:#16a34a">${r.f}</div></div><div style="background:#f1f3f6;border-radius:7px;padding:8px 10px"><div style="font-size:10px;color:#9098a5;margin-bottom:2px">Conversão</div><div style="font-size:20px;font-weight:800;color:#e02020">${r.tx}%</div></div></div></div>`).join('')||'<div style="color:#9098a5;font-size:13px;padding:20px">Cadastre consultores para ver o ranking.</div>';
+  const bd=nomes.map(c=>({n:c.split(' ')[0],l:DB.leads.filter(x=>x.consultor===c&&x.data>=dag(30)).length,f:DB.leads.filter(x=>x.consultor===c&&x.status==='Fechado'&&x.data>=dag(30)).length}));
+  const mpb=Math.max(...bd.map(x=>x.l),1);const PBW=600,PBH=150;const pbw=bd.length?Math.min(28,(PBW/bd.length)/2-4):28;
+  const pbars=bd.map((b,i)=>{const hl=(b.l/mpb)*(PBH-40),hf=(b.f/mpb)*(PBH-40),y0=PBH-30,xc=(PBW/bd.length)*i+(PBW/bd.length)/2;return`<rect x="${(xc-pbw-2).toFixed(1)}" y="${(y0-hl).toFixed(1)}" width="${pbw}" height="${hl.toFixed(1)}" fill="#e02020" rx="3"/><rect x="${(xc+2).toFixed(1)}" y="${(y0-hf).toFixed(1)}" width="${pbw}" height="${hf.toFixed(1)}" fill="#16a34a" rx="3"/><text x="${xc.toFixed(1)}" y="${PBH-4}" text-anchor="middle" fill="#9098a5" font-size="9">${b.n}</text>`;}).join('');
+  document.getElementById('pbchrt').innerHTML=`<svg viewBox="0 0 ${PBW} ${PBH}" class="svgc">${pbars}<circle cx="12" cy="12" r="4" fill="#e02020"/><text x="20" y="16" fill="#5a6270" font-size="10">Leads</text><circle cx="70" cy="12" r="4" fill="#16a34a"/><text x="78" y="16" fill="#5a6270" font-size="10">Fechados</text></svg>`;
+  document.getElementById('rfull').innerHTML=rk.map((r,i)=>`<div class="rrow"><span style="font-size:13px;font-weight:800;width:20px;color:${i===0?'#d97706':i===1?'#9098a5':i===2?'#b87333':'#9098a5'}">${i+1}</span><div class="av" style="width:28px;height:28px;font-size:10px">${r.n.split(' ').map(x=>x[0]).join('').slice(0,2)}</div><div style="flex:1"><div style="font-size:12px;font-weight:600;color:#1a1d23">${r.n}</div><div style="font-size:10px;color:#9098a5">${r.t} leads · ${r.f} fechados</div></div><div class="pbar" style="max-width:100px"><div class="pfill" style="width:${Math.round(r.f/mx*100)}%"></div></div><div style="width:36px;text-align:right;font-size:12px;font-weight:700;color:#e02020">${r.tx}%</div></div>`).join('')||'<div class="empty"><span>👤</span>Sem consultores cadastrados.</div>';
 }
 
-// ── RELATÓRIOS ─────────────────────────────────────────
 function renderRel(){
-  const hoje=hj();
-  function st(arr){const f=arr.filter(l=>l.status==='Fechado').length;return{t:arr.length,f,p:arr.filter(l=>l.status==='Perdido').length,tx:arr.length?Math.round(f/arr.length*100):0};}
-  const ps=[{l:'Hoje',s:st(leads.filter(l=>l.data===hoje))},{l:'7 dias',s:st(leads.filter(l=>l.data>=dag(7)))},{l:'30 dias',s:st(leads.filter(l=>l.data>=dag(30)))}];
-  document.getElementById('rcards').innerHTML=ps.map(p=>`
-    <div class="kcard">
-      <div style="font-size:12px;font-weight:700;color:#1a1d23;margin-bottom:10px;border-bottom:1px solid #e0e2e7;padding-bottom:8px">${p.l}</div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
-        ${[['Total',p.s.t,'#1a1d23'],['Fechados',p.s.f,'#16a34a'],['Perdidos',p.s.p,'#dc2626'],['Conversão',p.s.tx+'%','#e02020']].map(([lb,vl,cl])=>`<div style="background:#f1f3f6;border-radius:7px;padding:8px 10px"><div style="font-size:10px;color:#9098a5;margin-bottom:2px">${lb}</div><div style="font-size:18px;font-weight:800;color:${cl}">${vl}</div></div>`).join('')}
-      </div>
-    </div>`).join('');
-  const po=ORIG.map(o=>({o,t:leads.filter(l=>l.origem===o).length,f:leads.filter(l=>l.origem===o&&l.status==='Fechado').length})).filter(x=>x.t>0).sort((a,b)=>b.t-a.t);
-  const tot=leads.length||1;
-  document.getElementById('rtbody').innerHTML=po.map(o=>`
-    <tr>
-      <td><span class="otag"><span class="dot" style="background:${OCOL[o.o]||'#888'}"></span>${o.o}</span></td>
-      <td style="font-weight:700;color:#1a1d23">${o.t}</td>
-      <td style="color:#16a34a;font-weight:700">${o.f}</td>
-      <td>${o.t?Math.round(o.f/o.t*100):0}%</td>
-      <td><div style="display:flex;align-items:center;gap:8px"><div class="pbar" style="max-width:80px"><div class="pfill" style="width:${Math.round(o.t/tot*100)}%;background:${OCOL[o.o]||'#e02020'}"></div></div><span style="font-size:11px;color:#9098a5">${Math.round(o.t/tot*100)}%</span></div></td>
-    </tr>`).join('');
+  const hoje=hj();function st(arr){const f=arr.filter(l=>l.status==='Fechado').length;return{t:arr.length,f,p:arr.filter(l=>l.status==='Perdido').length,tx:arr.length?Math.round(f/arr.length*100):0};}
+  const ps=[{l:'Hoje',s:st(DB.leads.filter(l=>l.data===hoje))},{l:'7 dias',s:st(DB.leads.filter(l=>l.data>=dag(7)))},{l:'30 dias',s:st(DB.leads.filter(l=>l.data>=dag(30)))}];
+  document.getElementById('rcards').innerHTML=ps.map(p=>`<div class="kcard"><div style="font-size:12px;font-weight:700;color:#1a1d23;margin-bottom:10px;border-bottom:1px solid #e0e2e7;padding-bottom:8px">${p.l}</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">${[['Total',p.s.t,'#1a1d23'],['Fechados',p.s.f,'#16a34a'],['Perdidos',p.s.p,'#dc2626'],['Conversão',p.s.tx+'%','#e02020']].map(([lb,vl,cl])=>`<div style="background:#f1f3f6;border-radius:7px;padding:8px 10px"><div style="font-size:10px;color:#9098a5;margin-bottom:2px">${lb}</div><div style="font-size:18px;font-weight:800;color:${cl}">${vl}</div></div>`).join('')}</div></div>`).join('');
+  const po=ORIG.map(o=>({o,t:DB.leads.filter(l=>l.origem===o).length,f:DB.leads.filter(l=>l.origem===o&&l.status==='Fechado').length})).filter(x=>x.t>0).sort((a,b)=>b.t-a.t);
+  const tot=DB.leads.length||1;
+  document.getElementById('rtb').innerHTML=po.map(o=>`<tr><td><span class="otag"><span class="dot" style="background:${OCOL[o.o]||'#888'}"></span>${o.o}</span></td><td style="font-weight:700;color:#1a1d23">${o.t}</td><td style="color:#16a34a;font-weight:700">${o.f}</td><td>${o.t?Math.round(o.f/o.t*100):0}%</td><td><div style="display:flex;align-items:center;gap:8px"><div class="pbar" style="max-width:80px"><div class="pfill" style="width:${Math.round(o.t/tot*100)}%;background:${OCOL[o.o]||'#e02020'}"></div></div><span style="font-size:11px;color:#9098a5">${Math.round(o.t/tot*100)}%</span></div></td></tr>`).join('');
 }
 
-// ── CONSULTORES ────────────────────────────────────────
 function refreshSels(){
-  ['fcon','fco'].forEach(id=>{
-    const sel=document.getElementById(id);if(!sel)return;
-    const cur=sel.value;
-    const ph=id==='fcon'?'Todos os consultores':'Selecionar';
-    sel.innerHTML=`<option value="">${ph}</option>`+cons.map(c=>`<option${c.nome===cur?' selected':''}>${c.nome}</option>`).join('');
-  });
+  ['fcon','fco'].forEach(id=>{const sel=document.getElementById(id);if(!sel)return;const cur=sel.value;const ph=id==='fcon'?'Todos os consultores':'Selecionar';sel.innerHTML=`<option value="">${ph}</option>`+DB.cons.map(c=>`<option${c.nome===cur?' selected':''}>${c.nome}</option>`).join('');});
 }
-
 function renderConfig(){
-  const tb=document.getElementById('ctbody');if(!tb)return;
-  if(!cons.length){tb.innerHTML=`<tr><td colspan="6" class="empty"><span>👤</span>Nenhum consultor. Clique em "+ Novo Consultor".</td></tr>`;return;}
-  tb.innerHTML=cons.map((c,i)=>{
-    const cl=leads.filter(l=>l.consultor===c.nome),f=cl.filter(l=>l.status==='Fechado');
-    return`<tr>
-      <td style="color:#9098a5;font-weight:700">${i+1}</td>
-      <td><div style="display:flex;align-items:center;gap:10px"><div class="av" style="width:30px;height:30px;font-size:11px">${c.nome.split(' ').map(x=>x[0]).join('').slice(0,2)}</div><span style="color:#1a1d23;font-weight:600">${c.nome}</span></div></td>
-      <td style="color:#1a1d23;font-weight:600">${cl.length}</td>
-      <td style="color:#16a34a;font-weight:700">${f.length}</td>
-      <td style="color:#e02020;font-weight:700">${cl.length?Math.round(f.length/cl.length*100):0}%</td>
-      <td><div class="abts"><div class="ibt" onclick="openEditCons(${i})">✏️</div><div class="ibt del" onclick="askDelCons(${i})">🗑</div></div></td>
-    </tr>`;
-  }).join('');
+  const tb=document.getElementById('ctb');if(!tb)return;refreshSels();
+  if(!DB.cons.length){tb.innerHTML=`<tr><td colspan="6" class="empty"><span>👤</span>Nenhum consultor. Clique em "+ Novo Consultor".</td></tr>`;return;}
+  tb.innerHTML=DB.cons.map((c,i)=>{const cl=DB.leads.filter(l=>l.consultor===c.nome),f=cl.filter(l=>l.status==='Fechado');return`<tr><td style="color:#9098a5;font-weight:700">${i+1}</td><td><div style="display:flex;align-items:center;gap:10px"><div class="av" style="width:30px;height:30px;font-size:11px">${c.nome.split(' ').map(x=>x[0]).join('').slice(0,2)}</div><span style="color:#1a1d23;font-weight:600">${c.nome}</span></div></td><td style="color:#1a1d23;font-weight:600">${cl.length}</td><td style="color:#16a34a;font-weight:700">${f.length}</td><td style="color:#e02020;font-weight:700">${cl.length?Math.round(f.length/cl.length*100):0}%</td><td><div class="abts"><div class="ibt" onclick="openEditCons(${i})">✏️</div><div class="ibt dl" onclick="askDelC(${i})">🗑</div></div></td></tr>`;}).join('');
 }
-
 function openAddCons(){editConsIdx=null;document.getElementById('cmtitle').textContent='Novo Consultor';document.getElementById('cname').value='';document.getElementById('mcons').classList.add('open');setTimeout(()=>document.getElementById('cname').focus(),100);}
-function openEditCons(i){editConsIdx=i;document.getElementById('cmtitle').textContent='Editar Consultor';document.getElementById('cname').value=cons[i].nome;document.getElementById('mcons').classList.add('open');setTimeout(()=>document.getElementById('cname').focus(),100);}
+function openEditCons(i){editConsIdx=i;document.getElementById('cmtitle').textContent='Editar Consultor';document.getElementById('cname').value=DB.cons[i].nome;document.getElementById('mcons').classList.add('open');setTimeout(()=>document.getElementById('cname').focus(),100);}
 function closeCons(){document.getElementById('mcons').classList.remove('open');}
 function saveCons(){
-  const nome=document.getElementById('cname').value.trim();
-  if(!nome){alert('Informe o nome.');return;}
-  sync('Salvando...','saving');
-  if(editConsIdx!==null){
-    const antigo=cons[editConsIdx].nome;
-    db.ref('consultores/'+cons[editConsIdx].key).set({nome}, err=>{
-      if(err){alert('Erro ao salvar: '+err.message);sync('Erro!','err');}
-      else{leads.filter(l=>l.consultor===antigo).forEach(l=>db.ref('leads/'+l.key+'/consultor').set(nome));}
-    });
-  } else {
-    if(cons.find(c=>c.nome===nome)){alert('Já existe um consultor com este nome.');return;}
-    db.ref('consultores').push({nome}, err=>{
-      if(err){alert('Erro ao salvar: '+err.message);sync('Erro!','err');}
-    });
-  }
-  closeCons();
+  const nome=document.getElementById('cname').value.trim();if(!nome){alert('Informe o nome.');return;}
+  if(editConsIdx!==null){const antigo=DB.cons[editConsIdx].nome;DB.cons[editConsIdx]={nome};DB.leads=DB.leads.map(l=>l.consultor===antigo?{...l,consultor:nome}:l);}
+  else{if(DB.cons.find(c=>c.nome===nome)){alert('Já existe.');return;}DB.cons.push({nome});}
+  closeCons();saveDB();renderConfig();
 }
-function askDelCons(i){delConsIdx=i;document.getElementById('mdcons').classList.add('open');}
-function closeDelCons(){document.getElementById('mdcons').classList.remove('open');delConsIdx=null;}
-function confirmDelCons(){if(delConsIdx===null)return;sync('Removendo...','saving');db.ref('consultores/'+cons[delConsIdx].key).remove();closeDelCons();}
+function askDelC(i){delConsIdx=i;document.getElementById('mdcons').classList.add('open');}
+function closeDelC(){document.getElementById('mdcons').classList.remove('open');delConsIdx=null;}
+function confirmDelC(){if(delConsIdx===null)return;DB.cons.splice(delConsIdx,1);closeDelC();saveDB();renderConfig();}
 
-// ── EXPORT CSV ─────────────────────────────────────────
 function exportCSV(){
   const h=['ID','Nome','Telefone','Cidade','Produto','Origem','Consultor','Data','Status','Obs'];
-  const rows=leads.map(l=>[l.id,l.nome,l.telefone,l.cidade,l.produto,l.origem,l.consultor,l.data,l.status,l.obs||'']);
+  const rows=DB.leads.map(l=>[l.id,l.nome,l.telefone,l.cidade,l.produto,l.origem,l.consultor,l.data,l.status,l.obs||'']);
   const csv=[h,...rows].map(r=>r.map(v=>'"'+String(v||'').replace(/"/g,'""')+'"').join(',')).join('\n');
-  const a=document.createElement('a');
-  a.href=URL.createObjectURL(new Blob(['\uFEFF'+csv],{type:'text/csv;charset=utf-8'}));
-  a.download='leads_leadflow.csv';a.click();
+  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob(['\uFEFF'+csv],{type:'text/csv;charset=utf-8'}));a.download='leads.csv';a.click();
 }
 
-// ── FECHAR MODAIS ──────────────────────────────────────
+function exportarDados(){
+  const json=JSON.stringify(DB,null,2);
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(new Blob([json],{type:'application/json'}));
+  a.download='leadflow_dados_'+hj()+'.json';a.click();
+}
+function importarDados(input){
+  const file=input.files[0];if(!file)return;
+  const reader=new FileReader();
+  reader.onload=e=>{
+    try{
+      const data=JSON.parse(e.target.result);
+      if(data.leads&&data.cons){
+        if(confirm(`Importar ${data.leads.length} leads e ${data.cons.length} consultores?\n\nIsso vai SUBSTITUIR os dados atuais.`)){
+          DB=data;saveDB();refreshSels();renderDash();
+          alert('✅ Dados importados com sucesso!');
+        }
+      }else{alert('Arquivo inválido.');}
+    }catch(err){alert('Erro ao ler arquivo: '+err.message);}
+  };
+  reader.readAsText(file);
+  input.value='';
+}
+
 document.querySelectorAll('.mov').forEach(m=>m.addEventListener('click',function(e){if(e.target===this)this.classList.remove('open');}));
 
-// ── INICIAR ────────────────────────────────────────────
-document.getElementById('loading-screen').style.display='none';
-if(localStorage.getItem('lf_logged')==='1'){
-  showApp();
-} else {
-  document.getElementById('login-screen').classList.add('visible');
-}
+loadDB();
+if(localStorage.getItem('lf_auth')==='1'){showApp();}
+else{document.getElementById('login').classList.add('v');}
 </script>
 </body>
 </html>
